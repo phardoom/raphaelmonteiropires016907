@@ -12,7 +12,7 @@ SPA em React + TypeScript para cadastro e gestao de pets e tutores, consumindo a
 - Swagger: https://pet-manager-api.geia.vip/q/swagger-ui/
 
 ## Stack
-- React 18 + TypeScript
+- React 1.2.3 + TypeScript
 - Vite
 - Tailwind CSS
 - React Router
@@ -26,7 +26,6 @@ SPA em React + TypeScript para cadastro e gestao de pets e tutores, consumindo a
 - [x] Lazy loading de rotas/modulos
 - [x] Paginacao (server-side)
 - [x] Tratamento de erros (API e UI)
-- [ ] Testes unitarios 
 - [x] Docker + Nginx
 - [x] Docker Compose 
 
@@ -67,7 +66,7 @@ SPA em React + TypeScript para cadastro e gestao de pets e tutores, consumindo a
 - `src/utils`: helpers e mascaras
 
 ## Requisitos
-- Node.js 18+ (recomendado 20+)
+- Node.js 18+ (recomendado 19+)
 
 ## Variaveis de ambiente
 - `VITE_API_BASE_URL` (opcional): URL base da API.
@@ -112,7 +111,7 @@ docker run --rm -p 8080:80 pet-manager-frontend
 docker compose up --build
 ```
 
-Acesse: `http://localhost:8080`
+Acesse: `http://localhost:5174`
 
 ## Deploy (referencia)
 - Build gera a pasta `dist`
