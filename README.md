@@ -4,9 +4,9 @@ SPA em React + TypeScript para cadastro e gestao de pets e tutores, consumindo a
 
 ## Vaga e inscricao
 - Vaga: Desenvolvedor Front End (Projeto ANEXO II-B)
-- Candidato(a): [RAPHAEL MONTEIRO PIRES]
-- E-mail de inscricao: [raphael.pires@gmail.com]
-- Data de entrega: [22/01/2025]
+- Candidato(a): RAPHAEL MONTEIRO PIRES
+- E-mail de inscricao: raphael.pires@gmail.com
+- Data de entrega: 21/01/2025
 
 ## Links
 - Swagger: https://pet-manager-api.geia.vip/q/swagger-ui/
