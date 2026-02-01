@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { tutorsService } from "../services/tutorsService";
-import type { PagedTutorResponseDto } from "../types/tutors";
+import type { PagedTutorWithPetCountDto } from "../types/tutors";
 import { getErrorMessage } from "../utils/errorHandler";
 
 type TutorsListState = {
-  data: PagedTutorResponseDto | null;
+  data: PagedTutorWithPetCountDto | null;
   isLoading: boolean;
   error: string | null;
   nome: string;
@@ -39,8 +39,30 @@ export const useTutorsList = () => {
       setState((current) => ({ ...current, isLoading: true, error: null }));
       try {
         const response = await tutorsService.list(params);
+
+        // Buscar detalhes de cada tutor para obter contagem de pets
+        const tutorsWithDetails = await Promise.all(
+          response.content.map(async (tutor) => {
+            try {
+              const details = await tutorsService.getById(tutor.id);
+              return {
+                ...tutor,
+                petCount: details.pets?.length ?? 0,
+              };
+            } catch {
+              return { ...tutor, petCount: 0 };
+            }
+          })
+        );
+
         if (isMounted) {
-          setState((current) => ({ ...current, data: response }));
+          setState((current) => ({
+            ...current,
+            data: {
+              ...response,
+              content: tutorsWithDetails,
+            },
+          }));
         }
       } catch (err) {
         if (isMounted) {

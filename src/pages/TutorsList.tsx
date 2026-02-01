@@ -94,7 +94,14 @@ export const TutorsList = () => {
                   </div>
                 )}
                 <div className="grid gap-1 p-4">
-                  <strong className="text-base font-semibold text-slate-900">{tutor.nome}</strong>
+                  <div className="flex items-center gap-2">
+                    <strong className="text-base font-semibold text-slate-900">{tutor.nome}</strong>
+                    {tutor.petCount === 0 && (
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+                        Sem pets
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm text-slate-500">
                     {tutor.telefone ?? "Telefone não informado"}
                   </span>

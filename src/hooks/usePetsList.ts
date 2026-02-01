@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { petsService } from "../services/petsService";
-import type { PagedPetResponseDto } from "../types/pets";
+import type { PagedPetWithTutorCountDto } from "../types/pets";
 import { getErrorMessage } from "../utils/errorHandler";
 
 type PetsListState = {
-  data: PagedPetResponseDto | null;
+  data: PagedPetWithTutorCountDto | null;
   isLoading: boolean;
   error: string | null;
   nome: string;
@@ -72,8 +72,30 @@ export const usePetsList = () => {
       setState((current) => ({ ...current, isLoading: true, error: null }));
       try {
         const response = await petsService.list(params);
+        
+        // Buscar detalhes de cada pet para obter contagem de tutores
+        const petsWithDetails = await Promise.all(
+          response.content.map(async (pet) => {
+            try {
+              const details = await petsService.getById(pet.id);
+              return {
+                ...pet,
+                tutorCount: details.tutores?.length ?? 0,
+              };
+            } catch {
+              return { ...pet, tutorCount: 0 };
+            }
+          })
+        );
+
         if (isMounted) {
-          setState((current) => ({ ...current, data: response }));
+          setState((current) => ({
+            ...current,
+            data: {
+              ...response,
+              content: petsWithDetails,
+            },
+          }));
         }
       } catch (err) {
         if (isMounted) {

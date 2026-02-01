@@ -41,3 +41,15 @@ export type PagedTutorResponseDto = {
   pageCount: number;
   content: TutorResponseDto[];
 };
+
+export type TutorWithPetCount = TutorResponseDto & {
+  petCount: number;
+};
+
+export type PagedTutorWithPetCountDto = {
+  page: number;
+  size: number;
+  total: number;
+  pageCount: number;
+  content: TutorWithPetCount[];
+};

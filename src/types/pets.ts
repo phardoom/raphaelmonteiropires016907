@@ -31,3 +31,15 @@ export type PagedPetResponseDto = {
   content: PetResponseDto[];
 };
 
+export type PetWithTutorCount = PetResponseDto & {
+  tutorCount: number;
+};
+
+export type PagedPetWithTutorCountDto = {
+  page: number;
+  size: number;
+  total: number;
+  pageCount: number;
+  content: PetWithTutorCount[];
+};
+

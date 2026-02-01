@@ -108,7 +108,14 @@ export const PetsList = () => {
                   </div>
                 )}
                 <div className="grid gap-1 p-4">
-                  <strong className="text-base font-semibold text-slate-900">{pet.nome}</strong>
+                  <div className="flex items-center gap-2">
+                    <strong className="text-base font-semibold text-slate-900">{pet.nome}</strong>
+                    {pet.tutorCount === 0 && (
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+                        Sem tutor
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm text-slate-500">
                     Espécie/Raça: {pet.raca ?? "Não informado"}
                   </span>
