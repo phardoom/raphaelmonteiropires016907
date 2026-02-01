@@ -19,6 +19,7 @@ export const usePetDetail = (id?: string) => {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [tutores, setTutores] = useState<TutorResponseDto[]>([]);
   const [petName, setPetName] = useState("");
+  const [petPhotoUrl, setPetPhotoUrl] = useState<string | null>(null);
 
   const form = useForm<PetFormValues>({
     resolver: zodResolver(petSchema),
@@ -43,6 +44,7 @@ export const usePetDetail = (id?: string) => {
         const response = await petsService.getById(Number(id));
         if (isMounted) {
           setPetName(response.nome ?? "");
+          setPetPhotoUrl(response.foto?.url ?? null);
           form.reset({
             nome: response.nome ?? "",
             raca: response.raca ?? "",
@@ -125,6 +127,7 @@ export const usePetDetail = (id?: string) => {
     isDeleteModalOpen,
     error,
     petName,
+    petPhotoUrl,
     tutores,
     setPhotoFile,
     onSubmit,
