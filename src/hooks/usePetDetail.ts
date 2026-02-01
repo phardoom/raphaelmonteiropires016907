@@ -12,6 +12,7 @@ export const usePetDetail = (id?: string) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [tutores, setTutores] = useState<TutorResponseDto[]>([]);
@@ -93,13 +94,12 @@ export const usePetDetail = (id?: string) => {
     }
   };
 
-  const handleRemove = async () => {
+  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+  const confirmRemove = async () => {
     if (!id) {
       setError("ID do pet não informado.");
-      return;
-    }
-    const confirmed = window.confirm("Deseja realmente excluir este pet?");
-    if (!confirmed) {
       return;
     }
     setError(null);
@@ -109,8 +109,8 @@ export const usePetDetail = (id?: string) => {
       navigate("/pets", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível excluir o pet."));
-    } finally {
       setIsRemoving(false);
+      closeDeleteModal();
     }
   };
 
@@ -118,11 +118,14 @@ export const usePetDetail = (id?: string) => {
     form,
     isLoading,
     isRemoving,
+    isDeleteModalOpen,
     error,
     petName,
     tutores,
     setPhotoFile,
     onSubmit,
-    handleRemove,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmRemove,
   };
 };

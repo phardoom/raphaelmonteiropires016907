@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { PetForm } from "../components/forms/PetForm";
+import { ConfirmModal } from "../components/ui/ConfirmModal";
 import { ErrorState } from "../components/ui/ErrorState";
 import { Loading } from "../components/ui/Loading";
 import { usePetDetail } from "../hooks/usePetDetail";
@@ -11,12 +12,15 @@ export const PetDetail = () => {
     form,
     isLoading,
     isRemoving,
+    isDeleteModalOpen,
     error,
     petName,
     tutores,
     setPhotoFile,
     onSubmit,
-    handleRemove,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmRemove,
   } = usePetDetail(id);
 
   if (isLoading) {
@@ -45,12 +49,28 @@ export const PetDetail = () => {
           <button
             className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-100"
             type="button"
-            onClick={handleRemove}
-            disabled={isRemoving}
+            onClick={openDeleteModal}
           >
-            {isRemoving ? "Excluindo..." : "Excluir pet"}
+            Excluir pet
           </button>
         }
+      />
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Excluir pet"
+        message={`Tem certeza que deseja excluir "${petName}"? Esta ação não pode ser desfeita.`}
+        details={
+          tutores.length > 0
+            ? [`Este pet está vinculado a ${tutores.length} tutor${tutores.length > 1 ? "es" : ""}`]
+            : undefined
+        }
+        confirmLabel="Sim, excluir"
+        cancelLabel="Cancelar"
+        variant="danger"
+        isLoading={isRemoving}
+        onConfirm={confirmRemove}
+        onCancel={closeDeleteModal}
       />
 
       <section className="flex flex-col gap-4">

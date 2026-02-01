@@ -13,6 +13,7 @@ export const useTutorDetail = (id?: string) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [tutorData, setTutorData] = useState<TutorResponseComPetsDto | null>(null);
@@ -105,13 +106,12 @@ export const useTutorDetail = (id?: string) => {
     }
   };
 
-  const handleRemove = async () => {
+  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+  const confirmRemove = async () => {
     if (!id) {
       setError("ID do tutor não informado.");
-      return;
-    }
-    const confirmed = window.confirm("Deseja realmente excluir este tutor?");
-    if (!confirmed) {
       return;
     }
     setIsRemoving(true);
@@ -120,8 +120,8 @@ export const useTutorDetail = (id?: string) => {
       navigate("/tutores", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível excluir o tutor."));
-    } finally {
       setIsRemoving(false);
+      closeDeleteModal();
     }
   };
 
@@ -160,6 +160,7 @@ export const useTutorDetail = (id?: string) => {
     form,
     isLoading,
     isRemoving,
+    isDeleteModalOpen,
     error,
     tutorData,
     petIdToLink,
@@ -168,7 +169,9 @@ export const useTutorDetail = (id?: string) => {
     setPetIdToLink,
     setPhotoFile,
     onSubmit,
-    handleRemove,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmRemove,
     handleLinkPet,
     handleUnlinkPet,
   };

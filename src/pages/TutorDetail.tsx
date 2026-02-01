@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { TutorForm } from "../components/forms/TutorForm";
+import { ConfirmModal } from "../components/ui/ConfirmModal";
 import { ErrorState } from "../components/ui/ErrorState";
 import { Loading } from "../components/ui/Loading";
 import { useTutorDetail } from "../hooks/useTutorDetail";
@@ -11,6 +12,7 @@ export const TutorDetail = () => {
     form,
     isLoading,
     isRemoving,
+    isDeleteModalOpen,
     error,
     tutorData,
     petIdToLink,
@@ -19,7 +21,9 @@ export const TutorDetail = () => {
     setPetIdToLink,
     setPhotoFile,
     onSubmit,
-    handleRemove,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmRemove,
     handleLinkPet,
     handleUnlinkPet,
   } = useTutorDetail(id);
@@ -70,10 +74,9 @@ export const TutorDetail = () => {
               <button
                 className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-100"
                 type="button"
-                onClick={handleRemove}
-                disabled={isRemoving}
+                onClick={openDeleteModal}
               >
-                {isRemoving ? "Excluindo..." : "Excluir tutor"}
+                Excluir tutor
               </button>
             }
           />
@@ -199,6 +202,23 @@ export const TutorDetail = () => {
           </section>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Excluir tutor"
+        message={`Tem certeza que deseja excluir "${tutorData?.nome}"? Esta ação não pode ser desfeita.`}
+        details={
+          tutorData?.pets?.length
+            ? [`Este tutor possui ${tutorData.pets.length} pet${tutorData.pets.length > 1 ? "s" : ""} vinculado${tutorData.pets.length > 1 ? "s" : ""}`]
+            : undefined
+        }
+        confirmLabel="Sim, excluir"
+        cancelLabel="Cancelar"
+        variant="danger"
+        isLoading={isRemoving}
+        onConfirm={confirmRemove}
+        onCancel={closeDeleteModal}
+      />
     </section>
   );
 };
