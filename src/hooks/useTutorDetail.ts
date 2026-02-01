@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { petsService } from "../services/petsService";
 import { tutorsService } from "../services/tutorsService";
+import { useToast } from "../contexts/ToastContext";
 import { getErrorMessage } from "../utils/errorHandler";
 import { tutorSchema, type TutorFormValues } from "../validators/tutorSchema";
 import type { PetResponseCompletoDto } from "../types/pets";
@@ -11,6 +12,7 @@ import type { TutorResponseComPetsDto } from "../types/tutors";
 
 export const useTutorDetail = (id?: string) => {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -101,6 +103,7 @@ export const useTutorDetail = (id?: string) => {
       }
       const response = await fetchTutor(Number(id));
       await fetchAvailablePets(response.pets);
+      addToast("Tutor atualizado com sucesso!", "success");
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível atualizar o tutor."));
     }
@@ -117,6 +120,7 @@ export const useTutorDetail = (id?: string) => {
     setIsRemoving(true);
     try {
       await tutorsService.remove(Number(id));
+      addToast("Tutor excluído com sucesso!", "success");
       navigate("/tutores", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível excluir o tutor."));
@@ -136,6 +140,7 @@ export const useTutorDetail = (id?: string) => {
       const response = await fetchTutor(Number(id));
       await fetchAvailablePets(response.pets);
       setPetIdToLink("");
+      addToast("Pet vinculado com sucesso!", "success");
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível vincular o pet."));
     }
@@ -151,6 +156,7 @@ export const useTutorDetail = (id?: string) => {
       await tutorsService.unlinkPet(Number(id), petId);
       const response = await fetchTutor(Number(id));
       await fetchAvailablePets(response.pets);
+      addToast("Vínculo removido com sucesso!", "success");
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível remover o vínculo."));
     }

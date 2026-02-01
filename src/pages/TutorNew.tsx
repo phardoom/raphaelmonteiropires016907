@@ -4,12 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { TutorForm } from "../components/forms/TutorForm";
 import { ErrorState } from "../components/ui/ErrorState";
+import { useToast } from "../contexts/ToastContext";
 import { tutorsService } from "../services/tutorsService";
 import { getErrorMessage } from "../utils/errorHandler";
 import { tutorSchema, type TutorFormValues } from "../validators/tutorSchema";
 
 export const TutorNew = () => {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const form = useForm<TutorFormValues>({
@@ -23,6 +25,7 @@ export const TutorNew = () => {
       if (photoFile) {
         await tutorsService.uploadPhoto(created.id, photoFile);
       }
+      addToast("Tutor cadastrado com sucesso!", "success");
       navigate("/tutores", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível cadastrar o tutor."));

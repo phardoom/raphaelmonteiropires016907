@@ -4,12 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { petsService } from "../services/petsService";
 import { tutorsService } from "../services/tutorsService";
+import { useToast } from "../contexts/ToastContext";
 import { getErrorMessage } from "../utils/errorHandler";
 import type { TutorResponseDto } from "../types/tutors";
 import { petSchema, type PetFormValues } from "../validators/petSchema";
 
 export const usePetDetail = (id?: string) => {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -88,6 +90,7 @@ export const usePetDetail = (id?: string) => {
       if (photoFile) {
         await petsService.uploadPhoto(Number(id), photoFile);
       }
+      addToast("Pet atualizado com sucesso!", "success");
       navigate("/pets", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível atualizar o pet."));
@@ -106,6 +109,7 @@ export const usePetDetail = (id?: string) => {
     setIsRemoving(true);
     try {
       await petsService.remove(Number(id));
+      addToast("Pet excluído com sucesso!", "success");
       navigate("/pets", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível excluir o pet."));

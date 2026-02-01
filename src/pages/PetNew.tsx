@@ -4,12 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PetForm } from "../components/forms/PetForm";
 import { ErrorState } from "../components/ui/ErrorState";
+import { useToast } from "../contexts/ToastContext";
 import { petsService } from "../services/petsService";
 import { getErrorMessage } from "../utils/errorHandler";
 import { petSchema, type PetFormValues } from "../validators/petSchema";
 
 export const PetNew = () => {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const form = useForm<PetFormValues>({
@@ -27,6 +29,7 @@ export const PetNew = () => {
       if (photoFile) {
         await petsService.uploadPhoto(created.id, photoFile);
       }
+      addToast("Pet cadastrado com sucesso!", "success");
       navigate("/pets", { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Não foi possível cadastrar o pet."));
