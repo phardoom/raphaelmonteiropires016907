@@ -6,7 +6,7 @@ import { petsService } from "../services/petsService";
 import { tutorsService } from "../services/tutorsService";
 import { getErrorMessage } from "../utils/errorHandler";
 import { tutorSchema, type TutorFormValues } from "../validators/tutorSchema";
-import type { PetResponseDto } from "../types/pets";
+import type { PetResponseCompletoDto } from "../types/pets";
 import type { TutorResponseComPetsDto } from "../types/tutors";
 
 export const useTutorDetail = (id?: string) => {
@@ -17,7 +17,7 @@ export const useTutorDetail = (id?: string) => {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [tutorData, setTutorData] = useState<TutorResponseComPetsDto | null>(null);
   const [petIdToLink, setPetIdToLink] = useState("");
-  const [availablePets, setAvailablePets] = useState<PetResponseDto[]>([]);
+  const [availablePets, setAvailablePets] = useState<PetResponseCompletoDto[]>([]);
   const [isLoadingPets, setIsLoadingPets] = useState(false);
 
   const form = useForm<TutorFormValues>({
@@ -45,7 +45,13 @@ export const useTutorDetail = (id?: string) => {
     try {
       const response = await petsService.list({ page: 0, size: 200 });
       const linkedIds = new Set(linkedPets?.map((pet) => pet.id) ?? []);
-      setAvailablePets(response.content.filter((pet) => !linkedIds.has(pet.id)));
+      const filteredPets = response.content.filter((pet) => !linkedIds.has(pet.id));
+      
+      // Buscar detalhes completos de cada pet (incluindo tutores vinculados)
+      const petsWithDetails = await Promise.all(
+        filteredPets.map((pet) => petsService.getById(pet.id))
+      );
+      setAvailablePets(petsWithDetails);
     } finally {
       setIsLoadingPets(false);
     }

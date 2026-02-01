@@ -24,41 +24,59 @@ export const PetsList = () => {
   } = usePetsList();
 
   return (
-    <section className="page">
-      <header className="page-header">
+    <section className="flex flex-col gap-6">
+      <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2>Pets</h2>
-          <p>Gerencie os pets cadastrados no sistema.</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Pets</h2>
+          <p className="text-sm text-slate-500">Gerencie os pets cadastrados no sistema.</p>
         </div>
-        <Link className="app-button primary" to="/pets/new">
+        <Link
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-200/50 transition hover:bg-blue-800"
+          to="/pets/new"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
           Novo pet
         </Link>
       </header>
 
-      <form className="filters" onSubmit={handleFilterSubmit}>
-        <label>
+      <form
+        className="grid gap-4 rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm md:grid-cols-[1fr_1fr_auto]"
+        onSubmit={handleFilterSubmit}
+      >
+        <label className="grid gap-1.5 text-sm font-medium text-slate-700">
           Nome
           <input
             type="text"
             value={nome}
             onChange={(event) => setNome(event.target.value)}
             placeholder="Ex: Rex"
+            className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-100"
           />
         </label>
-        <label>
+        <label className="grid gap-1.5 text-sm font-medium text-slate-700">
           Raça
           <input
             type="text"
             value={raca}
             onChange={(event) => setRaca(event.target.value)}
             placeholder="Ex: Labrador"
+            className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-4 focus:ring-blue-100"
           />
         </label>
-        <div className="filters-actions">
-          <button className="app-button primary" type="submit">
+        <div className="flex items-end gap-2">
+          <button
+            className="h-10 rounded-xl bg-blue-700 px-5 text-sm font-semibold text-white transition hover:bg-blue-800"
+            type="submit"
+          >
             Filtrar
           </button>
-          <button className="app-button ghost" type="button" onClick={handleReset}>
+          <button
+            className="h-10 rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-600 transition hover:bg-slate-200"
+            type="button"
+            onClick={handleReset}
+          >
             Limpar
           </button>
         </div>
@@ -69,20 +87,34 @@ export const PetsList = () => {
       {error ? <ErrorState message={error} /> : null}
 
       {!isLoading && !error && data?.content?.length ? (
-        <div className="pets-grid">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {data.content.map((pet) => {
             const photoUrl = resolveApiUrl(pet.foto?.url);
             return (
-              <Link to={`/pets/${pet.id}`} className="pet-card" key={pet.id}>
+              <Link
+                to={`/pets/${pet.id}`}
+                className="group overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-sm transition hover:shadow-md"
+                key={pet.id}
+              >
                 {photoUrl ? (
-                  <img src={photoUrl} alt={pet.nome} />
+                  <img
+                    src={photoUrl}
+                    alt={pet.nome}
+                    className="h-40 w-full object-cover transition group-hover:scale-105"
+                  />
                 ) : (
-                  <div className="pet-placeholder">Sem foto</div>
+                  <div className="flex h-40 items-center justify-center bg-slate-100 text-sm text-slate-400">
+                    Sem foto
+                  </div>
                 )}
-                <div className="pet-card-content">
-                  <strong>{pet.nome}</strong>
-                  <span>Espécie/Raça: {pet.raca ?? "Não informado"}</span>
-                  <span>Idade: {pet.idade ?? "Não informado"}</span>
+                <div className="grid gap-1 p-4">
+                  <strong className="text-base font-semibold text-slate-900">{pet.nome}</strong>
+                  <span className="text-sm text-slate-500">
+                    Espécie/Raça: {pet.raca ?? "Não informado"}
+                  </span>
+                  <span className="text-sm text-slate-500">
+                    Idade: {pet.idade ?? "Não informado"}
+                  </span>
                 </div>
               </Link>
             );
@@ -100,7 +132,10 @@ export const PetsList = () => {
           }
           action={
             hasActiveFilters ? null : (
-              <Link className="app-button primary" to="/pets/new">
+              <Link
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-200/50 transition hover:bg-blue-800"
+                to="/pets/new"
+              >
                 Cadastrar pet
               </Link>
             )

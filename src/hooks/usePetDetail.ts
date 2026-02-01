@@ -49,14 +49,7 @@ export const usePetDetail = (id?: string) => {
             const tutors = await Promise.all(
               response.tutores.map((tutor) => tutorsService.getById(tutor.id))
             );
-            setTutores(
-              tutors.map((tutor) => ({
-                id: tutor.id,
-                nome: tutor.nome,
-                telefone: tutor.telefone,
-                email: tutor.email,
-              }))
-            );
+            setTutores(tutors);
           } else {
             setTutores([]);
           }

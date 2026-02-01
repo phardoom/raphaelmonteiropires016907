@@ -34,12 +34,10 @@ export const PetNew = () => {
   };
 
   return (
-    <section className="page">
-      <header className="page-header">
-        <div>
-          <h2>Novo pet</h2>
-          <p>Cadastre um novo pet no sistema.</p>
-        </div>
+    <section className="flex flex-col gap-6">
+      <header>
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Novo pet</h2>
+        <p className="text-sm text-slate-500">Cadastre um novo pet no sistema.</p>
       </header>
 
       {error ? <ErrorState message={error} /> : null}
