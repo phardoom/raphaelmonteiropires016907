@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { PetFormValues } from "../../validators/petSchema";
+import { ImageUpload } from "../ui/ImageUpload";
 
 type PetFormProps = {
   form: UseFormReturn<PetFormValues>;
@@ -8,6 +9,7 @@ type PetFormProps = {
   onPhotoChange: (file: File | null) => void;
   submitLabel: string;
   actions?: ReactNode;
+  currentPhotoUrl?: string;
 };
 
 export const PetForm = ({
@@ -16,6 +18,7 @@ export const PetForm = ({
   onPhotoChange,
   submitLabel,
   actions,
+  currentPhotoUrl,
 }: PetFormProps) => {
   const {
     register,
@@ -66,18 +69,11 @@ export const PetForm = ({
         )}
       </label>
 
-      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-        Foto do pet
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            onPhotoChange(file ?? null);
-          }}
-          className="text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100"
-        />
-      </label>
+      <ImageUpload
+        label="Foto do pet"
+        currentImageUrl={currentPhotoUrl}
+        onFileChange={onPhotoChange}
+      />
 
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button

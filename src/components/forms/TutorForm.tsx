@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { maskPhone } from "../../utils/masks";
 import type { TutorFormValues } from "../../validators/tutorSchema";
+import { ImageUpload } from "../ui/ImageUpload";
 
 type TutorFormProps = {
   form: UseFormReturn<TutorFormValues>;
@@ -9,6 +10,7 @@ type TutorFormProps = {
   onPhotoChange: (file: File | null) => void;
   submitLabel: string;
   actions?: ReactNode;
+  currentPhotoUrl?: string;
 };
 
 export const TutorForm = ({
@@ -17,6 +19,7 @@ export const TutorForm = ({
   onPhotoChange,
   submitLabel,
   actions,
+  currentPhotoUrl,
 }: TutorFormProps) => {
   const {
     register,
@@ -73,18 +76,11 @@ export const TutorForm = ({
         )}
       </label>
 
-      <label className="grid gap-1.5 text-sm font-medium text-slate-700">
-        Foto do tutor
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            onPhotoChange(file ?? null);
-          }}
-          className="text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100"
-        />
-      </label>
+      <ImageUpload
+        label="Foto do tutor"
+        currentImageUrl={currentPhotoUrl}
+        onFileChange={onPhotoChange}
+      />
 
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button

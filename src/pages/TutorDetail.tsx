@@ -48,28 +48,12 @@ export const TutorDetail = () => {
       <div className="grid gap-6 xl:grid-cols-2">
         {/* Coluna esquerda: Formulário */}
         <div className="flex flex-col gap-4">
-          {(() => {
-            const photoUrl = resolveApiUrl(tutorData?.foto?.url);
-            return photoUrl ? (
-              <div className="flex items-center gap-4 rounded-2xl border border-slate-200/70 bg-white p-4 shadow-sm">
-                <img
-                  className="h-20 w-20 rounded-xl object-cover"
-                  src={photoUrl}
-                  alt={`Foto de ${tutorData?.nome ?? "tutor"}`}
-                />
-                <div>
-                  <p className="text-sm font-medium text-slate-900">{tutorData?.nome}</p>
-                  <p className="text-xs text-slate-500">Foto atual do tutor</p>
-                </div>
-              </div>
-            ) : null;
-          })()}
-
           <TutorForm
             form={form}
             onSubmit={onSubmit}
             onPhotoChange={setPhotoFile}
             submitLabel="Salvar alterações"
+            currentPhotoUrl={resolveApiUrl(tutorData?.foto?.url)}
             actions={
               <button
                 className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-100"

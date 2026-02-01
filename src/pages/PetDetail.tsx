@@ -113,6 +113,7 @@ export const PetDetail = () => {
               onSubmit={onSubmit}
               onPhotoChange={setPhotoFile}
               submitLabel="Salvar alterações"
+              currentPhotoUrl={photoUrl}
             />
           </div>
 
